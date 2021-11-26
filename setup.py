@@ -1,6 +1,7 @@
 # coding=utf-8
 import os
 import pathlib
+import platform
 import subprocess
 import sys
 import textwrap
@@ -24,7 +25,9 @@ def define_extensions(use_openmp):
         # know we're dealing with Anaconda or if CFLAGS is set
         # with a requestsed arch
         if "anaconda" not in sys.version.lower():
-            compile_args.append("-march=native")
+            # Mac M1 not supported
+            if platform.machine() != "arm64":
+                compile_args.append("-march=native")
 
     if not use_openmp:
         print("Compiling without OpenMP support.")
